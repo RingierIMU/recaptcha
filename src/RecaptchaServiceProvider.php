@@ -50,8 +50,8 @@ class RecaptchaServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->bindRecaptcha();
         $this->handleConfig();
+        $this->bindRecaptcha();
     }
 
     protected function bindRecaptcha()
@@ -78,6 +78,11 @@ class RecaptchaServiceProvider extends ServiceProvider
         $this->publishes([
             $packageConfig => $destinationConfig,
         ]);
+
+        $this->mergeConfigFrom(
+            $packageConfig,
+            'recaptcha'
+        );
     }
 
     /**
