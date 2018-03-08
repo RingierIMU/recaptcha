@@ -2,20 +2,44 @@
 
 namespace Greggilbert\Recaptcha;
 
+use Greggilbert\Recaptcha\Service\RecaptchaInterface;
+use Illuminate\View\View;
+
 class Recaptcha
 {
-
+    /**
+     * @var RecaptchaInterface
+     */
     protected $service;
 
-    protected $config = [ ];
+    /**
+     * @var array
+     */
+    protected $config = [];
 
-    protected $dataParameterKeys = [ 'theme', 'type', 'callback', 'tabindex', 'expired-callback', 'badge' ];
+    /**
+     * @var array
+     */
+    protected $dataParameterKeys = [
+        'theme',
+        'type',
+        'callback',
+        'tabindex',
+        'expired-callback',
+        'badge',
+    ];
 
 
-    public function __construct($service, $config)
-    {
+    /**
+     * @param $service
+     * @param $config
+     */
+    public function __construct(
+        RecaptchaInterface $service,
+        array $config
+    ) {
         $this->service = $service;
-        $this->config  = $config;
+        $this->config = $config;
     }
 
     /**
@@ -23,15 +47,16 @@ class Recaptcha
      *
      * @param array $options
      *
-     * @return view
+     * @return View
      */
-    public function render($options = [ ])
-    {
+    public function render(
+        array $options = []
+    ) {
         $mergedOptions = array_merge($this->config['options'], $options);
 
         $data = [
             'public_key' => value($this->config['public_key']),
-            'options'    => $mergedOptions,
+            'options' => $mergedOptions,
             'dataParams' => $this->extractDataParams($mergedOptions),
         ];
 
@@ -51,8 +76,9 @@ class Recaptcha
      *
      * @return string
      */
-    protected function getView($options = [ ])
-    {
+    protected function getView(
+        array $options = []
+    ): string {
         $view = 'recaptcha::' . $this->service->getTemplate();
 
         $configTemplate = $this->config['template'];
@@ -74,8 +100,9 @@ class Recaptcha
      *
      * @return array
      */
-    protected function extractDataParams($options = [ ])
-    {
+    protected function extractDataParams(
+        array $options = []
+    ): array {
         return array_only($options, $this->dataParameterKeys);
     }
 }
