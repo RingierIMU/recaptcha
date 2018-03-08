@@ -1,8 +1,8 @@
 <?php
-if ( ! function_exists('renderDataAttributes')) {
+if (!function_exists('renderDataAttributes')) {
     function renderDataAttributes($attributes)
     {
-        $mapped = [ ];
+        $mapped = [];
         foreach ($attributes as $key => $value) {
             $mapped[] = 'data-' . $key . '="' . $value . '"';
         };
@@ -11,7 +11,11 @@ if ( ! function_exists('renderDataAttributes')) {
     }
 }
 ?>
-<script src='https://www.google.com/recaptcha/api.js?render=onload{{ (isset($lang) ? '&hl='.$lang : '') }}'></script>
+<script
+    src='https://www.google.com/recaptcha/api.js?render=onload{{ (isset($lang) ? '&hl=' . $lang : '') }}'
+    async
+    defer
+></script>
 <div
     class="g-recaptcha"
     data-sitekey="{{ $public_key }}"
