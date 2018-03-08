@@ -27,6 +27,7 @@ class Recaptcha
         'tabindex',
         'expired-callback',
         'badge',
+        'size',
     ];
 
 
