@@ -25,8 +25,6 @@ class RecaptchaServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->addValidator();
-
         $this->loadViewsFrom(__DIR__ . '/views', 'recaptcha');
     }
 
@@ -35,12 +33,21 @@ class RecaptchaServiceProvider extends ServiceProvider
      */
     public function addValidator()
     {
-        $this->app->validator->extendImplicit('recaptcha', function ($attribute, $value, $parameters) {
-            $captcha   = app('recaptcha.service');
-            $challenge = app('request')->input($captcha->getResponseKey());
+        $this->app->resolving(
+            'validator',
+            function ($validator) {
+                $validator->extendImplicit(
+                    'recaptcha',
+                    function ($attribute, $value, $parameters) {
+                        $captcha = app('recaptcha.service');
+                        $challenge = app('request')->input($captcha->getResponseKey());
 
-            return $captcha->check($challenge, $value);
-        }, 'Please ensure that you are a human!');
+                        return $captcha->check($challenge, $value);
+                    },
+                    'Please ensure that you are a human!'
+                );
+            }
+        );
     }
 
     /**
@@ -52,6 +59,7 @@ class RecaptchaServiceProvider extends ServiceProvider
     {
         $this->handleConfig();
         $this->bindRecaptcha();
+        $this->addValidator();
     }
 
     protected function bindRecaptcha()
@@ -81,7 +89,7 @@ class RecaptchaServiceProvider extends ServiceProvider
 
     protected function handleConfig()
     {
-        $packageConfig     = __DIR__ . '/config/recaptcha.php';
+        $packageConfig = __DIR__ . '/config/recaptcha.php';
         $destinationConfig = config_path('recaptcha.php');
 
         $this->publishes([
