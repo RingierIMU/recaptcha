@@ -11,14 +11,8 @@ tldr; I don't really have time to maintain this package on my own, so I'm lookin
 
 ## Installation
 
-Add the following line to the `require` section of `composer.json`:
-
-```json
-{
-    "require": {
-        "greggilbert/recaptcha": "dev-master"
-    }
-}
+```bash
+composer require greggilbert/recaptcha
 ```
 
 ## Setup
